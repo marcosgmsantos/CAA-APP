@@ -160,6 +160,24 @@ Entry.find({username: userData.usernam})
 
 
 
+/* Read - GET method */
+app.get('/user/list', (req, res) => {
+    // fetching data from database
+    Entry.find()
+    .then(data => {
+        res.send(data)
+    })
+    .catch(err => {
+        res.status(500).send({
+        message:
+            err.message || "Some error occurred while retrieving Entrys."
+        });
+    });
+
+})
+
+
+
 
 
 /* util functions */

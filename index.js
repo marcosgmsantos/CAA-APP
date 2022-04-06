@@ -177,6 +177,40 @@ app.get('/user/list', (req, res) => {
 })
 
 
+/* Update - Put method */
+app.put('/user/update/:username', (req, res) => {
+    //get the username from url
+    const username = req.params.username
+    //get the update data
+    const userData = req.body
+
+    //looking for username if  exists
+    Entry.find({username:username})
+    .then(data => {
+        if(data){
+            //updating user as already exists here
+            Entry.findOneAndUpdate({username:username},userData).then(data=>{
+                // res.send(data)
+                console.log('updated')
+                res.send(data)
+                res.redirect('/')
+            }).catch(err=>{
+                return res.status(409).send({error: true, msg: 'username not exist'})
+            })
+            
+        }else{ 
+            return res.status(409).send({error: true, msg: 'username not exist'})
+            
+        }
+    })
+    .catch(err => {
+        res.status(500).send({
+        message:
+            err.message || "Some error occurred while retrieving Entrys."
+        });
+    });
+ 
+})
 
 
 
@@ -188,6 +222,6 @@ app.get('/add-user', (req, res) =>{
 })
 
 //configure the server port
-app.listen(3030, () => {
-    console.log('Server runs on port 3000')
+app.listen(process.env.PORT || 3030, () => {
+    console.log('Server runs on port 3030')
 })

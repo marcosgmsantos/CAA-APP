@@ -53,7 +53,7 @@ app.set("view engine", "ejs")
 
 // load assets
 app.use(express.static('assets'));
-let api='http://localhost:3030/user/list'
+let api='https://caacrudapp.herokuapp.com/user/list'
 
 app.get('/', (req, res) => {
     axios.get(api)
@@ -210,6 +210,19 @@ app.put('/user/update/:username', (req, res) => {
         });
     });
  
+})
+
+/* Delete - Delete method */
+app.delete('/user/delete/:username', (req, res) => {
+    const username = req.params.username
+    //finding user by username and deleting the user
+     Entry.deleteOne({username :username}).then(data=>{
+        // deleting user
+        res.send({success: true, msg: 'User removed successfully'})
+    }).catch(err=>{
+        return res.status(409).send({error: true, msg: 'username does not exist'})
+    }) 
+    
 })
 
 
